@@ -53,4 +53,4 @@ def fitness(genome: Genome, items: [Item], weight_limit: int) -> int:
 
 
 
-#  --built from Kie Codes YT--
+#  --built from Kie Codes--

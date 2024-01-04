@@ -1,10 +1,14 @@
-from typing import List, Callable
-from random import choices
-from collections import namedtuple #revisit!!!!!!!!!!!
+from typing import List, Callable, Tuple
+from random import choices, randint, randrange, random
+from collections import namedtuple
 
 Genome = List[int]
 Population = List[Genome]
 FitnessFunc = Callable[[Genome], int]
+PopulateFunc = Callable[[], Population]
+SelectionFunc = Callable[[Population, FitnessFunc], Tuple[Genome, Genome]]
+CrossoverFunc = Callable[[Genome, Genome], Tuple[Genome, Genome]]
+MutationFunc = Callable[[Genome], Genome]
 Item = namedtuple('Item', ['name', 'value', 'weight'])
 
 #  --- Your items ---
@@ -26,7 +30,7 @@ more_items = [
    Item('Baseball Cap', 30,192),
 ] + items
 
-# --- Genom, population, and fitness functions ---
+# --- Genome, Population, And Fitness Functions ---
 
 def generate_genome(length:int) -> Genome:
    return choices([0,1], k=length)
@@ -51,6 +55,7 @@ def fitness(genome: Genome, items: [Item], weight_limit: int) -> int:
          
    return value
 
+# --- Crossover Function ---
 
 def selection_pair(population: Population, fitness_func: FitnessFunc) -> Population:
    return choices(
@@ -68,4 +73,27 @@ def single_point_crossover(a:Genome, b: Genome) -> Tuple[Genome, Genome]:
    p = randint(1, length -1)
    return a[0:p] + b[p:], b[0:p] + a[p:]
 
-#  --built from Kie Codes--
+# --- Mutation Function ---
+
+def mutation(genome: Genome, num: int = 1, probabilty: float = 0.5) -> Genome:
+   for _ in range(num):
+      index = randrange(len(genome))
+      genome[index] = genome[index] if random() > probabilty else abs(genome[index] - 1)
+      return genome
+   
+
+# --- Evolutionary Main Loop ---
+   
+
+def run_evolution(
+      populate_func: PopulateFunc,
+      fitness_func: FitnessFunc,
+      fitness_limit: int,
+      selection_func: SelectionFunc = selection_pair,
+      crossover_func: CrossoverFunc = single_point_crossover,
+      mutation_func: MutationFunc = mutation,
+      generation_limit: int = 100
+) -> Tuple[Population, int]:
+   
+
+#  --built from Kie Codes

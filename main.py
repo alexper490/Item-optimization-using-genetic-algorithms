@@ -21,6 +21,7 @@ items = [
    Item('Water Bottle', 30,192),
 ]
 
+# --- More items ---
 
 more_items = [
    Item('Mints', 500, 2200),
